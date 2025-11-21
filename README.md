@@ -16,7 +16,8 @@ texto literário clássico e adequado para análises quantitativas
 dentro da área da Linguística.
 
 # Objetivos do Projeto:
-- Leitura e pré-processamento do corpus Contagem de palavras, frases e linhas;
+- Leitura e pré-processamento do corpus;
+- Contagem de palavras, frases e linhas;
 - Limpeza do texto;
 - Criação de tabelas de frequência;
 - Construção de pelo menos dois gráficos diferentes;
