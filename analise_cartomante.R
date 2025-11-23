@@ -362,3 +362,94 @@ ggplot(df, aes(
   )
 
 
+## VARIAVEIS NUMERICAS
+
+tamanho <- nchar(df$palavra)
+num_vogais <- stringr::str_count(df$palavra, "[aeiouáéíóú]")
+num_consoantes <- stringr::str_count(df$palavra, "[bcdfghjklmnpqrstvwxyz]")
+letras_repetidas <- stringr::str_count(df$palavra, "([a-z])\\1")
+digrafos <- stringr::str_count(df$palavra, "lh|nh|ch|rr|ss")
+primeira_letra_num <- match(substr(df$palavra, 1, 1), letters)
+ultima_letra_num <- match(substr(df$palavra, nchar(df$palavra), nchar(df$palavra)), letters)
+freq_norm <- df$n / sum(df$n)
+sem_acento <- stringi::stri_trans_general(df$palavra, "Latin-ASCII")
+tamanho_sem_acento <- nchar(sem_acento)
+
+library(dplyr)
+library(stringr)
+library(stringi)
+
+df <- df %>%
+  mutate(
+    tamanho = nchar(palavra),
+    num_vogais = str_count(palavra, "[aeiouáéíóú]"),
+    num_consoantes = str_count(palavra, "[bcdfghjklmnpqrstvwxyz]"),
+    final_r = as.integer(str_detect(palavra, "r$")),
+    letras_repetidas = str_count(palavra, "([a-z])\\1"),
+    digrafos = str_count(palavra, "lh|nh|ch|rr|ss"),
+    primeira_letra_num = match(substr(palavra, 1, 1), letters),
+    ultima_letra_num = match(substr(palavra, nchar(palavra), nchar(palavra)), letters),
+    freq_norm = if ("n" %in% names(df)) n / sum(n) else NA,
+    tamanho_sem_acento = nchar(stri_trans_general(palavra, "Latin-ASCII"))
+  )
+
+# GRAFICOS PARA ESSAS VARIAVEIS
+
+# tamanho das palavras
+ggplot(df, aes(x = tamanho)) +
+  geom_histogram(bins = 20, fill = "steelblue", color = "white") +
+  labs(
+    title = "Distribuição do Tamanho das Palavras",
+    x = "Número de letras",
+    y = "Frequência"
+  )
+
+# numero de vogais
+ggplot(df, aes(x = num_vogais)) +
+  geom_histogram(bins = 10, fill = "darkgreen", color = "white") +
+  labs(
+    title = "Distribuição de Vogais nas Palavras",
+    x = "Quantidade de vogais",
+    y = "Frequência"
+  )
+
+# consoantes
+
+ggplot(df, aes(x = num_consoantes)) +
+  geom_histogram(bins = 10, fill = "firebrick", color = "white") +
+  labs(
+    title = "Distribuição de Consoantes nas Palavras",
+    x = "Quantidade de consoantes",
+    y = "Frequência"
+  )
+
+# graficos para digrafos
+
+ggplot(df, aes(x = digrafos)) +
+  geom_bar(fill = "orchid") +
+  labs(
+    title = "Frequência de Dígrafos por Palavra",
+    x = "Quantidade de dígrafos",
+    y = "Número de palavras"
+  )
+
+# vogais x consoantes
+
+ggplot(df, aes(x = num_vogais, y = num_consoantes)) +
+  geom_point(alpha = 0.5, color = "purple") +
+  labs(
+    title = "Relação entre Vogais e Consoantes",
+    x = "Nº de vogais",
+    y = "Nº de consoantes"
+  )
+
+# tamanho palavras
+
+ggplot(df, aes(y = tamanho)) +
+  geom_boxplot(fill = "lightblue") +
+  labs(
+    title = "Boxplot do Tamanho das Palavras",
+    y = "Número de letras"
+  )
+
+
